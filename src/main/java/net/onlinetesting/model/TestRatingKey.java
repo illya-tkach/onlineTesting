@@ -10,16 +10,12 @@ import java.io.Serializable;
 
 @Getter
 @Setter
+@EqualsAndHashCode
 @NoArgsConstructor
 @AllArgsConstructor
-@Embeddable
 public class TestRatingKey implements Serializable {
 
+    private Long user;
 
-    @Column(name = "user_id")
-    private Long userId;
-
-
-    @Column(name = "test_id")
-    private Long testId;
+    private Long test;
 }

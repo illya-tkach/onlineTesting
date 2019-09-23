@@ -10,6 +10,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 
+import java.util.Set;
+
 @Controller
 public class DefaultController {
 
@@ -24,13 +26,13 @@ public class DefaultController {
     public String indexPage(Model model) {
 
         User user = userRepository.getOne(1L);
-        Test test = testRepository.getOne(1L);
+//        Test test = testRepository.getOne(1L);
+//
+//        TestRating testRating = new TestRating(user, test, 50);
 
-        TestRating testRating = new TestRating(user, test, 50);
+        Set<TestRating> test = user.getTestRatings();
 
-        user.getTestRatings().add(testRating);
-
-        userRepository.save(user);
+//        userRepository.save(user);
 
         return "index";
     }

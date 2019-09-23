@@ -12,27 +12,20 @@ import java.io.Serializable;
 @AllArgsConstructor
 @Entity
 @Table(name = "testRating")
+@IdClass(TestRatingKey.class)
 public class TestRating implements Serializable {
 
-    @EmbeddedId
-    TestRatingKey id;
-
+    @Id
     @ManyToOne
-    @MapsId("user_id")
-    @JoinColumn(name = "user_id")
-    User user;
+    @JoinColumn(name = "user_id", referencedColumnName = "id")
+    private User user;
 
+    @Id
     @ManyToOne
-    @MapsId("test_id")
-    @JoinColumn(name = "test_id")
-    Test test;
+    @JoinColumn(name = "test_id", referencedColumnName = "id")
+    private Test test;
 
     @Column
     private int rating;
 
-    public TestRating(User user, Test test, int rating) {
-        this.user = user;
-        this.test = test;
-        this.rating = rating;
-    }
 }
