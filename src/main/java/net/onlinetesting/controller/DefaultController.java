@@ -25,15 +25,6 @@ public class DefaultController {
     @GetMapping("/")
     public String indexPage(Model model) {
 
-        User user = userRepository.getOne(1L);
-//        Test test = testRepository.getOne(1L);
-//
-//        TestRating testRating = new TestRating(user, test, 50);
-
-        Set<TestRating> test = user.getTestRatings();
-
-//        userRepository.save(user);
-
         return "index";
     }
 

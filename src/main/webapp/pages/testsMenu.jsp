@@ -37,29 +37,6 @@
 <nav id="navbar" class="navbar navbar-expand-lg navbar-dark bg-dark mb-4">
     <a class="navbar-brand" href="#"><i class="fab fa-monero"></i><fmt:message key="name" /></a>
     <div class="collapse navbar-collapse justify-content-between" id="navbarSupportedContent">
-        <ul class="navbar-nav mr-auto">
-            <sec:authorize access="hasRole('ROLE_ADMIN')">
-                <li class="nav-item">
-                    <a class="nav-link" href="/recordList"><fmt:message key="menu.records" /><span class="sr-only">(current)</span></a>
-                </li>
-            </sec:authorize>
-            <sec:authorize access="hasRole('ROLE_USER')">
-                <li class="nav-item">
-                    <a class="nav-link" href="/clientMenu"><fmt:message key="menu.booking" /><span class="sr-only">(current)</span></a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="/personal"><fmt:message key="menu.personal"/><span class="sr-only">(current)</span></a>
-                </li>
-            </sec:authorize>
-            <sec:authorize access="isAnonymous()">
-                <li  class="nav-item">
-                    <a href="/registration" class="nav-link"><fmt:message key="menu.registration" /><span class="sr-only">(current)</span></a>
-                </li>
-                <li  class="nav-item">
-                    <a href="/login" class="nav-link"><fmt:message key="menu.login" /><span class="sr-only">(current)</span></a>
-                </li>
-            </sec:authorize>
-        </ul>
         <ul class="navbar-nav ">
             <li class="nav-item">
                 <span class="navbar-text"><fmt:message key="lang.change" /></span>:
@@ -89,8 +66,13 @@
     </div>
 </nav>
 <div class="container d-flex justify-content-center" >
+    <ul class="list-group">
+<c:forEach items="${testList}" var="test">
 
+    <a href="<c:url value='/getTest-${test.id}' />" class="list-group-item list-group-item-action">${test.topicName}</a>
 
+</c:forEach>
+    </ul>
 </div>
 <script type="text/javascript">
     $(document).ready(function() {
