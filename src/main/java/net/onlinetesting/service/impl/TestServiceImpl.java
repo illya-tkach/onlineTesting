@@ -20,7 +20,8 @@ public class TestServiceImpl implements TestService {
     }
 
     @Override
-    public Test getById() {
+    public Test getById(long id) {
+
         return null;
     }
 }

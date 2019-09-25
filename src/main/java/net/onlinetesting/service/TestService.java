@@ -6,5 +6,6 @@ import java.util.List;
 
 public interface TestService {
     List<Test> getAllTests();
-    Test getById();
+
+    Test getById(long id);
 }

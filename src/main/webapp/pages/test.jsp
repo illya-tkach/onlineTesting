@@ -24,7 +24,7 @@
         body{
             height: 200px; /* Высота блока */
             /*border: 2px solid #000; !* Параметры рамки *!*/
-            background: url("${contextPath}/resources/images/barber.jpeg") 100% 100% no-repeat; /* Добавляем фон */
+            <%--background: url("${contextPath}/resources/images/barber.jpeg") 100% 100% no-repeat; /* Добавляем фон */--%>
             background-size: cover; /* Масштабируем фон */
         }
     </style>
@@ -66,13 +66,35 @@
     </div>
 </nav>
 <div class="container d-flex justify-content-center" >
-    <ul class="list-group">
-<c:forEach items="${testList}" var="test">
+    <div class="row">
+        <div class="col-6">
+            <ul class="list-group">
+                <script>var count = 1;</script>
+                <c:forEach items="${sessionScope.questionList}" var="questionList">
 
-    <a href="<c:url value='/getRandQuestions-${test.id}' />" class="list-group-item list-group-item-action">${test.topicName}</a>
+                    <a href="<c:url value='/getQuestion-${questionList.id}' />" class="list-group-item list-group-item-action"><script>document.write(count++)</script></a>
 
-</c:forEach>
-    </ul>
+                </c:forEach>
+            </ul>
+        </div>
+        <div class="col-6">
+            <c:choose>
+                <c:when test= "${questionList[0].questionType.name == 'ONE'}">
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" value="" id="defaultCheck1">
+                        <label class="form-check-label" for="defaultCheck1">
+                            Default checkbox
+                        </label>
+                    </div>
+
+                </c:when>
+                <c:otherwise>
+                    do this when nothing else is true
+                </c:otherwise>
+            </c:choose>
+        </div>
+    </div>
+
 </div>
 <script type="text/javascript">
     $(document).ready(function() {
