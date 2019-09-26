@@ -23,8 +23,6 @@
     <style type="text/css">
         body{
             height: 200px; /* Высота блока */
-            /*border: 2px solid #000; !* Параметры рамки *!*/
-            <%--background: url("${contextPath}/resources/images/barber.jpeg") 100% 100% no-repeat; /* Добавляем фон */--%>
             background-size: cover; /* Масштабируем фон */
         }
     </style>
@@ -72,26 +70,34 @@
                 <script>var count = 1;</script>
                 <c:forEach items="${sessionScope.questionList}" var="questionList">
 
-                    <a href="<c:url value='/getQuestion-${questionList.id}' />" class="list-group-item list-group-item-action"><script>document.write(count++)</script></a>
+<%--                    <a href="<c:url value='/getQuestion-${questionList.id}' />" class="list-group-item list-group-item-action"><script>document.write(count++)</script></a>--%>
+                    <button type="button" value="${questionList.id}" class="btn btn-primary mb-1"><script>document.write(count++)</script></button>
 
                 </c:forEach>
             </ul>
         </div>
         <div class="col-6">
-            <c:choose>
-                <c:when test= "${questionList[0].questionType.name == 'ONE'}">
-                    <div class="form-check">
-                        <input class="form-check-input" type="checkbox" value="" id="defaultCheck1">
-                        <label class="form-check-label" for="defaultCheck1">
-                            Default checkbox
-                        </label>
-                    </div>
 
+            <div>
+                ${questionList[0].definition}
+            <c:choose>
+                <c:when test= "${questionList[0].questionType.name == 'MULTIPLE'}">
+                <div>
+                    <c:forEach items="${questionList[0].answers}" var="answer">
+                        <input type="checkbox" id="contactChoice${answer.id}" class="get_value" value="${answer.id}">
+                        <label for="contactChoice${answer.id}">${answer.definition}</label>
+                    </c:forEach>
+                </div>
                 </c:when>
                 <c:otherwise>
-                    do this when nothing else is true
+                    <c:forEach items="${questionList[0].answers}" var="answer">
+                        <input type="radio" name="radioAnswer" id="contactChoice${answer.id}" value="${answer.id}">
+                        <label for="contactChoice${answer.id}">${answer.definition}</label>
+                    </c:forEach>
                 </c:otherwise>
             </c:choose>
+            </div>
+            <button type="button" name="submit" class="btn btn-info" id="submit">Ответить</button>
         </div>
     </div>
 
@@ -109,3 +115,33 @@
 
 </body>
 </html>
+<script>
+    $(document).ready(function () {
+            $('#submit').click(function () {
+                var idViaRadioChoice = $( "input[name='radioAnswer']" ).val();
+                if(idViaRadioChoice != undefined){
+                    var radioAnswer = $( "input[name='radioAnswer']:checked" ).val();
+                    ajaxSend("/radioAnswered", radioAnswer)
+                } else {
+                    var answers = [];
+                    $('.get_value').each(function () {
+                        if ($(this).is(":checked")) {
+                            answers.push($(this).val());
+                        }
+                    });
+                    ajaxSend("/checkboxAnswered", answers)
+                }
+                function ajaxSend(url, data) {
+                    $.ajax({
+                        type: "POST",
+                        url: url,
+                        contentType: "application/json",
+                        data: JSON.stringify(data),
+                        success: function () {
+                            alert('ggg');
+                        }
+                    });
+                }
+            });
+    });
+</script>

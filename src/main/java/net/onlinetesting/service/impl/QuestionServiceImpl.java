@@ -21,4 +21,10 @@ public class QuestionServiceImpl implements QuestionService {
         return questionRepository.getTenRandomQuestions(testId);
 
     }
+
+    @Override
+    public List<Question> getAllQuestions(){
+        return questionRepository.findAll();
+    }
+
 }
