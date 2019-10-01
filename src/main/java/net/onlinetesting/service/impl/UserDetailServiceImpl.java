@@ -1,6 +1,5 @@
 package net.onlinetesting.service.impl;
 
-import net.onlinetesting.model.Role;
 import net.onlinetesting.model.User;
 import net.onlinetesting.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;

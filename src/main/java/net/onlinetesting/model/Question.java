@@ -1,9 +1,12 @@
 package net.onlinetesting.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 
 import javax.persistence.*;
+import java.util.List;
 import java.util.Set;
+import java.util.TreeSet;
 
 
 @Getter
@@ -26,9 +29,10 @@ public class Question {
     @Column(name = "questionType", nullable = false)
     private QuestionType questionType;
 
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "question")
-    private Set<Answer> answers;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "question", fetch=FetchType.EAGER)
+    private List<Answer> answers;
 
+    @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "test_id")
     private Test test;

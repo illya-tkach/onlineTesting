@@ -1,16 +1,16 @@
 package net.onlinetesting.controller;
 
+import net.onlinetesting.dto.QuestionDTO;
+import net.onlinetesting.dto.mapper.QuestionMapper;
 import net.onlinetesting.model.Answer;
 import net.onlinetesting.model.Question;
 import net.onlinetesting.service.QuestionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.SessionAttributes;
+import org.springframework.web.bind.annotation.*;
 
+import javax.inject.Inject;
 import javax.servlet.http.HttpSession;
 import java.util.ArrayList;
 import java.util.List;
@@ -24,20 +24,27 @@ public class QuestionController {
     QuestionService questionService;
 
     @ModelAttribute("questionList")
-    public  List<Question> etUpUserForm() {
+    public  List<QuestionDTO> setUpUserForm() {
         return new ArrayList<>();
     }
 
     @GetMapping("/getRandQuestions-{testId}")
-    public String setServedStatus(@PathVariable("testId") long testId, Model model, @ModelAttribute("questionList") List<Question> questionList)  {
+    public String getQuestions(@PathVariable("testId") long testId, Model model, @ModelAttribute("questionList") List<QuestionDTO> questionList)  {
 
         if (questionList.size() == 0){
-//           questionList = questionService.getTenRandomQuestions(testId);
-           List<Question> questionList2 = questionService.getAllQuestions();
-           Set<Answer> answers = questionList2.get(0).getAnswers();
-           model.addAttribute("questionList", questionList2);
+           List<QuestionDTO> questionDTOList = questionService.toDtoQuestions();
+           model.addAttribute("questionList", questionDTOList);
         }
 
         return "test";
     }
+
+    @RequestMapping(value = "/getQuestion-{id}", method = RequestMethod.GET, produces = "application/json")
+    @ResponseBody
+    public Question setServedStatus(@PathVariable("id") long id, HttpSession httpSession)  {
+        Question question = questionService.getQuestion(id);
+
+        return question;
+    }
+
 }

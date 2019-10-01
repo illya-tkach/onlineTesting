@@ -67,18 +67,22 @@
     <div class="row">
         <div class="col-6">
             <ul class="list-group">
-                <script>var count = 1;</script>
-                <c:forEach items="${sessionScope.questionList}" var="questionList">
-
-<%--                    <a href="<c:url value='/getQuestion-${questionList.id}' />" class="list-group-item list-group-item-action"><script>document.write(count++)</script></a>--%>
-                    <button type="button" value="${questionList.id}" class="btn btn-primary mb-1"><script>document.write(count++)</script></button>
-
+                <script>
+                    var count = 1;
+                    var questionsIdsArray = new Array();
+                </script>
+                <button type="button" name="selectedButton" value="${questionList[0].id}" class="btn btn-primary disabled mb-1" ]><script>document.write(count++)</script></button>
+                <script>questionsIdsArray.push(${questionList[0].id})</script>
+                <c:forEach begin="1" items="${sessionScope.questionList}" var="questionList">
+                    <button type="button" name=" " onclick="clickQuestion(this);return false;" value="${questionList.id}" class="btn btn-primary mb-1" ]><script>document.write(count++)</script></button>
+                    <script>questionsIdsArray.push(${questionList.id})</script>
                 </c:forEach>
+<%--                <script>sessionStorage.setItem('questionsIdsArray', JSON.stringify(questionsIdsArray));</script>--%>
             </ul>
         </div>
         <div class="col-6">
 
-            <div>
+            <div id="currentQuestion">
                 ${questionList[0].definition}
             <c:choose>
                 <c:when test= "${questionList[0].questionType.name == 'MULTIPLE'}">
@@ -118,30 +122,89 @@
 <script>
     $(document).ready(function () {
             $('#submit').click(function () {
-                var idViaRadioChoice = $( "input[name='radioAnswer']" ).val();
-                if(idViaRadioChoice != undefined){
-                    var radioAnswer = $( "input[name='radioAnswer']:checked" ).val();
-                    ajaxSend("/radioAnswered", radioAnswer)
-                } else {
-                    var answers = [];
-                    $('.get_value').each(function () {
-                        if ($(this).is(":checked")) {
-                            answers.push($(this).val());
-                        }
-                    });
-                    ajaxSend("/checkboxAnswered", answers)
-                }
-                function ajaxSend(url, data) {
-                    $.ajax({
-                        type: "POST",
-                        url: url,
-                        contentType: "application/json",
-                        data: JSON.stringify(data),
-                        success: function () {
-                            alert('ggg');
-                        }
-                    });
-                }
+                repaintQuestion();
+                selectNextButton();
             });
     });
+
+    function selectNextButton() {
+        var selectedQuestion = $( "button[name='selectedButton']" );
+        selectedQuestion.attr("name", " ");
+        selectedQuestion.removeClass("disabled");
+        var questionID = parseInt(selectedQuestion.val());
+        var index = questionsIdsArray.indexOf(questionID);
+        var nextIndex;
+        if (index < questionsIdsArray.length-1){
+            nextIndex = index + 1;
+        } else {
+            nextIndex = 0;
+        }
+        var idValue = questionsIdsArray[nextIndex];
+        var nextSelectedQuestion = $( "button[value="+idValue+"]" );
+        nextSelectedQuestion.attr("name", "selectedButton");
+        nextSelectedQuestion.addClass("disabled");
+    }
+
+    function repaintQuestion() {
+        var idViaRadioChoice = $( "input[name='radioAnswer']" ).val();
+        if(idViaRadioChoice != undefined){
+            var radioAnswer = $( "input[name='radioAnswer']:checked" ).val();
+            var questionID = $( "button[name='selectedButton']" ).val();
+            alert("questionID!!!" + questionID);
+            ajaxSend("/radioAnswered", radioAnswer, questionID);
+        } else {
+            var answers = [];
+            $('.get_value').each(function () {
+                if ($(this).is(":checked")) {
+                    answers.push($(this).val());
+                }
+            });
+            ajaxSend("/checkboxAnswered", answers)
+        }
+    }
+
+    function ajaxSend(url, answerID, questionID) {
+        $.ajax({
+            type: "POST",
+            url: url,
+            data: "answerID="+answerID+"&questionID="+questionID,
+            success: function () {
+                alert('ggg');
+            }
+        });
+    }
+
+    function getQuestionAjax(url) {
+        $.ajax({
+            type: "GET",
+            url: url,
+            contentType: "application/json",
+            success: function (data) {
+                addQuestionToView(data);
+            }
+        });
+    }
+    function clickQuestion(obj) {
+
+        var questionId = $(obj).val();
+        getQuestionAjax("/getQuestion-" + questionId)
+
+    }
+
+    function addQuestionToView(data) {
+        var select = $('#currentQuestion').empty();
+
+        select.append(data.definition);
+        if (data.questionType === 'ONE'){
+            $.each(data.answers, function (i, item) {
+                select.append('<input type="radio" name="radioAnswer" id="contactChoice'+item.id+'" value="'+item.id+'">'+
+                '<label for="contactChoice'+item.id+'">'+item.definition+'</label>');
+            })
+        } else {
+            $.each(data.answers, function (i, item) {
+                select.append('<input type="checkbox" id="contactChoice'+item.id+'" class="get_value" value="'+item.id+'">'+
+                '<label for="contactChoice'+item.id+'">'+item.definition+'</label>');
+            })
+        }
+    }
 </script>

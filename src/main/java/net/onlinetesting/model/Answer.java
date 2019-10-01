@@ -1,5 +1,6 @@
 package net.onlinetesting.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 
 import javax.persistence.*;
@@ -22,6 +23,7 @@ public class Answer {
     @Column(name = "isCorrect", nullable = false)
     private boolean isCorrect;
 
+    @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "question_id")
     private Question question;
