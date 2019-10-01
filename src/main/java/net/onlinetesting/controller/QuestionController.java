@@ -43,7 +43,6 @@ public class QuestionController {
     @ResponseBody
     public Question setServedStatus(@PathVariable("id") long id, HttpSession httpSession)  {
         Question question = questionService.getQuestion(id);
-
         return question;
     }
 

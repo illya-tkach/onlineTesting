@@ -123,14 +123,11 @@
     $(document).ready(function () {
             $('#submit').click(function () {
                 repaintQuestion();
-                selectNextButton();
             });
     });
 
-    function selectNextButton() {
+    function selectNextButton(radioAnswer, questionId) {
         var selectedQuestion = $( "button[name='selectedButton']" );
-        selectedQuestion.attr("name", " ");
-        selectedQuestion.removeClass("disabled");
         var questionID = parseInt(selectedQuestion.val());
         var index = questionsIdsArray.indexOf(questionID);
         var nextIndex;
@@ -139,8 +136,15 @@
         } else {
             nextIndex = 0;
         }
-        var idValue = questionsIdsArray[nextIndex];
-        var nextSelectedQuestion = $( "button[value="+idValue+"]" );
+        var nextQuestionId = questionsIdsArray[nextIndex];
+        var nextSelectedQuestion = $( "button[value="+nextQuestionId+"]" );
+
+        ajaxSend("/radioAnswered", radioAnswer, questionId, nextQuestionId);
+
+
+        selectedQuestion.attr("name", " ");
+        selectedQuestion.removeClass("disabled");
+
         nextSelectedQuestion.attr("name", "selectedButton");
         nextSelectedQuestion.addClass("disabled");
     }
@@ -150,8 +154,7 @@
         if(idViaRadioChoice != undefined){
             var radioAnswer = $( "input[name='radioAnswer']:checked" ).val();
             var questionID = $( "button[name='selectedButton']" ).val();
-            alert("questionID!!!" + questionID);
-            ajaxSend("/radioAnswered", radioAnswer, questionID);
+            selectNextButton(radioAnswer, questionID);
         } else {
             var answers = [];
             $('.get_value').each(function () {
@@ -163,13 +166,13 @@
         }
     }
 
-    function ajaxSend(url, answerID, questionID) {
+    function ajaxSend(url, answerID, questionID, nextQuestionID) {
         $.ajax({
             type: "POST",
             url: url,
-            data: "answerID="+answerID+"&questionID="+questionID,
-            success: function () {
-                alert('ggg');
+            data: "answerID="+answerID+"&questionID="+questionID+"&nextQuestionID="+nextQuestionID,
+            success: function (data) {
+                alert("Ответи от сервера - " + data.definition);
             }
         });
     }

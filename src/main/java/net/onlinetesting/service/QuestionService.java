@@ -10,4 +10,5 @@ public interface QuestionService {
     List<Question> getAllQuestions ();
     Question getQuestion(long id);
     List<QuestionDTO> toDtoQuestions();
+    QuestionDTO getNextQuestion(long questionID, List<QuestionDTO> questionDTOS);
 }

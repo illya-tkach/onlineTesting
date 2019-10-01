@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import javax.inject.Inject;
 import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.Optional;
 
 @Service
 public class QuestionServiceImpl implements QuestionService {
@@ -39,6 +40,17 @@ public class QuestionServiceImpl implements QuestionService {
 
     public List<QuestionDTO> toDtoQuestions(){
         return mapper.fromQuestions(questionRepository.findAll());
+    }
+
+    @Override
+    public QuestionDTO getNextQuestion(long questionID, List<QuestionDTO> questionDTOS) {
+
+        Optional<QuestionDTO> questionDTO = questionDTOS.stream()
+                .filter(question -> question.getId() == questionID)
+                .findAny();
+
+        if(questionDTO.isPresent()) return questionDTO.get();
+        else throw new java.lang.RuntimeException();
     }
 
 }
