@@ -41,9 +41,10 @@ public class QuestionController {
 
     @RequestMapping(value = "/getQuestion-{id}", method = RequestMethod.GET, produces = "application/json")
     @ResponseBody
-    public Question setServedStatus(@PathVariable("id") long id, HttpSession httpSession)  {
-        Question question = questionService.getQuestion(id);
-        return question;
+    public QuestionDTO setServedStatus(@PathVariable("id") long id, @SessionAttribute("questionList") List<QuestionDTO> questionList)  {
+
+        return questionService.getNextQuestion(id, questionList);
+
     }
 
 }
