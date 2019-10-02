@@ -11,4 +11,6 @@ public interface TestService {
     Test getById(long id);
 
     int calculatePoints(List<QuestionDTO> questionDTOS);
+
+    void save(Test test);
 }

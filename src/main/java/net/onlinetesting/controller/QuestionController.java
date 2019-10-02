@@ -24,15 +24,16 @@ public class QuestionController {
     QuestionService questionService;
 
     @ModelAttribute("questionList")
-    public  List<QuestionDTO> setUpUserForm() {
+    public  List<QuestionDTO> setUpQuestionList() {
         return new ArrayList<>();
     }
 
     @GetMapping("/getRandQuestions-{testId}")
-    public String getQuestions(@PathVariable("testId") long testId, Model model, @ModelAttribute("questionList") List<QuestionDTO> questionList)  {
+    public String getQuestions(@PathVariable("testId") long testId, Model model, @ModelAttribute("questionList") List<QuestionDTO> questionList, HttpSession session)  {
 
         if (questionList.size() == 0){
            List<QuestionDTO> questionDTOList = questionService.toDtoQuestions();
+           session.setAttribute("currentTestID", testId);
            model.addAttribute("questionList", questionDTOList);
         }
 

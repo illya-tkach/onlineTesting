@@ -23,7 +23,7 @@ public class TestServiceImpl implements TestService {
 
     @Override
     public Test getById(long id) {
-        return null;
+        return testRepository.getOne(id);
     }
 
     @Override
@@ -43,5 +43,10 @@ public class TestServiceImpl implements TestService {
         }
 
         return totalPoints;
+    }
+
+    @Override
+    public void save(Test test) {
+        testRepository.save(test);
     }
 }

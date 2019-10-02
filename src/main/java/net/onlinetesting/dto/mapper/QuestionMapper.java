@@ -1,11 +1,8 @@
 package net.onlinetesting.dto.mapper;
 
-import net.onlinetesting.dto.AnswerDTO;
 import net.onlinetesting.dto.QuestionDTO;
-import net.onlinetesting.model.Answer;
 import net.onlinetesting.model.Question;
 import org.mapstruct.InheritInverseConfiguration;
-import org.mapstruct.IterableMapping;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 

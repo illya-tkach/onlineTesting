@@ -104,7 +104,7 @@
     </div>
     <div class="row">
         <div class="col-12">
-            <a href="/results" class="btn btn-danger btn-lg active" role="button" aria-pressed="true">Ответить</a>
+            <a href="/results" class="btn btn-danger btn-lg active" role="button" aria-pressed="true">Закончить тест</a>
         </div>
     </div>
 </div>

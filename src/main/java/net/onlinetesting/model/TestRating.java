@@ -1,5 +1,6 @@
 package net.onlinetesting.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 
 import javax.persistence.*;
@@ -20,6 +21,7 @@ public class TestRating implements Serializable {
     @JoinColumn(name = "user_id", referencedColumnName = "id")
     private User user;
 
+    @JsonIgnore
     @Id
     @ManyToOne
     @JoinColumn(name = "test_id", referencedColumnName = "id")
