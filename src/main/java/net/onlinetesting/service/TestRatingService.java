@@ -5,7 +5,10 @@ import net.onlinetesting.model.TestRating;
 import net.onlinetesting.model.TestRatingKey;
 import net.onlinetesting.model.User;
 
+import java.util.Optional;
+
 public interface TestRatingService {
     void save(TestRating testRating);
-    TestRating getRatingByKey(TestRatingKey key);
+    void save(User user, Test test, int points);
+    Optional<TestRating> getRatingByKey(TestRatingKey key);
 }

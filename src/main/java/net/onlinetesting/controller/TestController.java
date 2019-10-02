@@ -14,9 +14,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.SessionAttribute;
-
 import java.security.Principal;
 import java.util.List;
+import java.util.Set;
 
 @Controller
 public class TestController {
@@ -50,16 +50,11 @@ public class TestController {
         User user = userService.findByEmail(principal.getName());
         Test test = testService.getById(testID);
 
-
-        TestRatingKey key = new TestRatingKey(user.getId(), test.getId());
-
-        TestRating testRating = testRatingService.getRatingByKey(key);
-
-        testRating.setRating(totalPoints);
-
-        testRatingService.save(testRating);
+        testRatingService.save(user, test, totalPoints);
 
         model.addAttribute("totalPoints", totalPoints);
+
+        model.addAttribute("questionList", questionList);
 
         return "resultPage";
     }

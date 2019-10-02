@@ -13,9 +13,10 @@ import java.io.Serializable;
 @EqualsAndHashCode
 @NoArgsConstructor
 @AllArgsConstructor
+@Embeddable
 public class TestRatingKey implements Serializable {
 
-    private Long user;
+    private long userID;
 
-    private Long test;
+    private long testID;
 }

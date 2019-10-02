@@ -3,11 +3,14 @@ package net.onlinetesting.model;
 
 import lombok.*;
 import org.hibernate.validator.constraints.NotEmpty;
+import org.springframework.stereotype.Service;
+
 import javax.persistence.*;
 import java.util.Set;
 
 
-@Data
+@Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
