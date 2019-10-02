@@ -63,7 +63,7 @@
 
     </div>
 </nav>
-<div class="container d-flex justify-content-center" >
+<div class="container d-flex justify-content-center">
     <div class="row">
         <div class="col-6">
             <ul class="list-group">
@@ -71,17 +71,15 @@
                     var count = 1;
                     var questionsIdsArray = new Array();
                 </script>
-                <button type="button" name="selectedButton" value="${questionList[0].id}" class="btn btn-primary disabled mb-1" ]><script>document.write(count++)</script></button>
+                <button type="button" name="selectedButton" onclick="clickQuestion(this);return false;" value="${questionList[0].id}" class="btn btn-primary disabled mb-1" ]><script>document.write(count++)</script></button>
                 <script>questionsIdsArray.push(${questionList[0].id})</script>
                 <c:forEach begin="1" items="${sessionScope.questionList}" var="questionList">
                     <button type="button" name=" " onclick="clickQuestion(this);return false;" value="${questionList.id}" class="btn btn-primary mb-1" ]><script>document.write(count++)</script></button>
                     <script>questionsIdsArray.push(${questionList.id})</script>
                 </c:forEach>
-<%--                <script>sessionStorage.setItem('questionsIdsArray', JSON.stringify(questionsIdsArray));</script>--%>
             </ul>
         </div>
         <div class="col-6">
-
             <div id="currentQuestion">
                 ${questionList[0].definition}
             <c:choose>
@@ -104,7 +102,11 @@
             <button type="button" name="submit" class="btn btn-info" id="submit">Ответить</button>
         </div>
     </div>
-
+    <div class="row">
+        <div class="col-12">
+            <a href="/results" class="btn btn-danger btn-lg active" role="button" aria-pressed="true">Ответить</a>
+        </div>
+    </div>
 </div>
 <script type="text/javascript">
     $(document).ready(function() {
@@ -172,7 +174,7 @@
             url: url,
             data: "answerID="+answerID+"&questionID="+questionID+"&nextQuestionID="+nextQuestionID,
             success: function (data) {
-                alert("Ответи от сервера - " + data.definition);
+                addQuestionToView(data);
             }
         });
     }
@@ -188,21 +190,43 @@
         });
     }
     function clickQuestion(obj) {
+        var previousSelectedQuestion = $( "button[name='selectedButton']" );
+        previousSelectedQuestion.attr("name", " ");
+        previousSelectedQuestion.removeClass("disabled");
 
-        var questionId = $(obj).val();
-        getQuestionAjax("/getQuestion-" + questionId)
+        $(obj).attr("name", "selectedButton");
+        $(obj).addClass("disabled");
+
+        getQuestionAjax("/getQuestion-" + $(obj).val())
 
     }
 
     function addQuestionToView(data) {
+        var answeredQuestion = false;
         var select = $('#currentQuestion').empty();
 
         select.append(data.definition);
         if (data.questionType === 'ONE'){
             $.each(data.answers, function (i, item) {
-                select.append('<input type="radio" name="radioAnswer" id="contactChoice'+item.id+'" value="'+item.id+'">'+
-                '<label for="contactChoice'+item.id+'">'+item.definition+'</label>');
-            })
+                if (item.answered == true){
+                    answeredQuestion = true;
+                    return false;
+                }
+            });
+            $.each(data.answers, function (i, item) {
+                if (answeredQuestion){
+                    if (item.answered) {
+                        select.append('<input type="radio" name="radioAnswer" id="contactChoice' + item.id + '" value="' + item.id + '" checked="checked" disabled>' +
+                            '<label for="contactChoice' + item.id + '">' + item.definition + '</label>');
+                    } else {
+                        select.append('<input type="radio" name="radioAnswer" id="contactChoice' + item.id + '" value="' + item.id + '" disabled>' +
+                            '<label for="contactChoice' + item.id + '">' + item.definition + '</label>');
+                    }
+                } else {
+                    select.append('<input type="radio" name="radioAnswer" id="contactChoice' + item.id + '" value="' + item.id + '">' +
+                        '<label for="contactChoice' + item.id + '">' + item.definition + '</label>');
+                }
+            });
         } else {
             $.each(data.answers, function (i, item) {
                 select.append('<input type="checkbox" id="contactChoice'+item.id+'" class="get_value" value="'+item.id+'">'+

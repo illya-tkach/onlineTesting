@@ -1,5 +1,7 @@
 package net.onlinetesting.service.impl;
 
+import net.onlinetesting.dto.AnswerDTO;
+import net.onlinetesting.dto.QuestionDTO;
 import net.onlinetesting.model.Test;
 import net.onlinetesting.repository.TestRepository;
 import net.onlinetesting.service.TestService;
@@ -21,7 +23,25 @@ public class TestServiceImpl implements TestService {
 
     @Override
     public Test getById(long id) {
-
         return null;
+    }
+
+    @Override
+    public int calculatePoints(List<QuestionDTO> questionDTOS) {
+        int totalPoints = 0;
+
+        for (QuestionDTO question : questionDTOS){
+            boolean isUserCorrectAnswered = true;
+            for (AnswerDTO answer :question.getAnswers()) {
+                if(answer.isAnswered() != answer.isCorrect()){
+                    isUserCorrectAnswered = false;
+                    break;
+                }
+            }
+            if (isUserCorrectAnswered)
+                totalPoints += 1;
+        }
+
+        return totalPoints;
     }
 }
