@@ -1,4 +1,3 @@
-<%@ page import="java.io.OutputStream" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
@@ -12,13 +11,11 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-
     <title>Users List</title>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
     <link href="${contextPath}/resources/css/bootstrap.min.css" rel="stylesheet"/>
     <link href="${contextPath}/resources/css/common.css" rel="stylesheet"/>
-
 </head>
 <body>
 <nav id="navbar" class="navbar navbar-expand-lg navbar-dark bg-dark mb-4">
@@ -68,29 +65,18 @@
             </tr>
             </thead>
             <tbody>
-            <c:forEach items="${questionList}" var="question">
+            <c:forEach items="${testRatings}" var="rating">
                 <tr>
-                    <td>${user.firstName} ${user.lastName}</td>
-                    <td>${question.localDate}</td>
-                    <td>${question.localTime}</td>
-                    <td>${question.status}</td>
+                    <td>${rating.user.firstName} ${rating.user.lastName}</td>
+                    <td>${rating.user.email}</td>
+                    <td>${rating.test.topicName}</td>
+                    <td>${rating.rating}</td>
                 </tr>
             </c:forEach>
             </tbody>
         </table>
     </div>
 </div>
-
-<sec:authorize access="hasRole('ADMIN')">
-    <div align="center" class="well">
-        <a class="btn btn-primary" href="<c:url value='/newRecord' />"><fmt:message key="recordPage.button.addNew" /></a>
-    </div>
-    <%--    <button onclick="AddRecordModal();return false;" type="button" class="btn btn-outline-primary mb-3">Add new Record</button>--%>
-</sec:authorize>
-
-<script>
-
-</script>
 
 
 <script type="text/javascript">
@@ -103,8 +89,5 @@
         });
     });
 </script>
-<!-- /container -->
-<%--<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>--%>
-<%--<script src="${contextPath}/resources/js/bootstrap.min.js"></script>--%>
 </body>
 </html>

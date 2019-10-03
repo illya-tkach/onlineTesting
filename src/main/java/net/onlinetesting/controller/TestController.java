@@ -59,10 +59,11 @@ public class TestController {
 
     @GetMapping("/getRating")
     public String getRating(Model model) {
-
         List<TestRating> testRatings = testRatingService.findAll();
 
-        return "resultPage";
+        model.addAttribute("testRatings", testRatings);
+
+        return "studentsResults";
     }
 
 }

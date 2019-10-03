@@ -24,7 +24,6 @@
         body{
             height: 200px; /* Высота блока */
             /*border: 2px solid #000; !* Параметры рамки *!*/
-            background: url("${contextPath}/resources/images/barber.jpeg") 100% 100% no-repeat; /* Добавляем фон */
             background-size: cover; /* Масштабируем фон */
         }
     </style>
@@ -65,15 +64,28 @@
 
     </div>
 </nav>
-<div class="container d-flex justify-content-center" >
-    <ul class="list-group">
-        <c:forEach items="${testList}" var="test">
-
-            <a href="<c:url value='/getRandQuestions-${test.id}' />" class="list-group-item list-group-item-action">${test.topicName}</a>
-
-        </c:forEach>
-    </ul>
-</div>
+<div class="container" >
+    <div class="row justify-content-center">
+        <div class="col-6">
+            <p>Количество правильных ответов: ${totalPoints} из ${questionList.size()}</p>
+        </div>
+    </div>
+    <c:forEach items="${questionList}" var="question">
+        <div class="row justify-content-center">
+            <div class="col-6 justify-content-center">
+                <div>
+                    ${question.definition}
+                </div>
+                <c:forEach items="${question.answers}" var="answer">
+                <div>
+                        <input type="radio" name="radioAnswer" id="contactChoice${answer.id}" value="${answer.id}">
+                        <label for="contactChoice${answer.id}">${answer.definition}</label>
+                </div>
+                </c:forEach>
+            </div>
+        </div>
+    </c:forEach>
+</>
 <script type="text/javascript">
     $(document).ready(function() {
         $("#locales").change(function () {
