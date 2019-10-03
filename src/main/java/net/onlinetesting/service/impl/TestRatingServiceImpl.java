@@ -8,6 +8,8 @@ import net.onlinetesting.repository.TestRatingRepository;
 import net.onlinetesting.service.TestRatingService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -33,5 +35,10 @@ public class TestRatingServiceImpl implements TestRatingService {
     @Override
     public Optional<TestRating> getRatingByKey(TestRatingKey key) {
         return testRatingRepository.findById(key);
+    }
+
+    @Override
+    public List<TestRating> findAll() {
+        return testRatingRepository.findAllByOrderByUser_emailAsc();
     }
 }

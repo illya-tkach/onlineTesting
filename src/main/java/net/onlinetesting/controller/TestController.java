@@ -3,7 +3,6 @@ package net.onlinetesting.controller;
 import net.onlinetesting.dto.QuestionDTO;
 import net.onlinetesting.model.Test;
 import net.onlinetesting.model.TestRating;
-import net.onlinetesting.model.TestRatingKey;
 import net.onlinetesting.model.User;
 import net.onlinetesting.service.TestRatingService;
 import net.onlinetesting.service.TestService;
@@ -16,7 +15,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.SessionAttribute;
 import java.security.Principal;
 import java.util.List;
-import java.util.Set;
 
 @Controller
 public class TestController {
@@ -55,6 +53,14 @@ public class TestController {
         model.addAttribute("totalPoints", totalPoints);
 
         model.addAttribute("questionList", questionList);
+
+        return "resultPage";
+    }
+
+    @GetMapping("/getRating")
+    public String getRating(Model model) {
+
+        List<TestRating> testRatings = testRatingService.findAll();
 
         return "resultPage";
     }
